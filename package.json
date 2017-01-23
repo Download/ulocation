@@ -12,7 +12,16 @@
     "url": "git+https://github.com/Download/ulocation.git"
   },
   "keywords": [
-    "1kB"
+    "1kB",
+    "Small",
+    "Tiny",
+    "Micro",
+    "Microscopically small",
+    "parser",
+    "URL",
+    "Location",
+    "Universal",
+    "Isomorphic"
   ],
   "author": "Stijn de Witt",
   "license": "MIT",

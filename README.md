@@ -59,7 +59,10 @@ console.info(params)         // > Object {q:'hello'}
 ```
 
 ## Microscopically small
-The browser version of ulocation is just ~..kB minified and zipped.
+The browser version of ulocation is just ~0.5kB minified and zipped. 
+Due to it's tiny size it does not come as a separate download. Instead you should use 
+[Browserify](http://browserify.org/) or [Webpack](https://webpack.js.org/) to include 
+it in your bundle.
 
 ## Issues
 Add an issue in this project's [issue tracker](https://github.com/download/ulocation/issues)
