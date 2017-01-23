@@ -1,0 +1,27 @@
+{
+  "name": "ulocation",
+  "version": "0.1.0",
+  "description": "Microscopically small universal URL to Location parser",
+  "main": "ulocation.js",
+  "browser": "ulocation.browser.js",
+  "scripts": {
+    "test": "mocha *.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Download/ulocation.git"
+  },
+  "keywords": [
+    "1kB"
+  ],
+  "author": "Stijn de Witt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Download/ulocation/issues"
+  },
+  "homepage": "https://github.com/Download/ulocation#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
