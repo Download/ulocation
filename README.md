@@ -50,12 +50,34 @@ console.info(loc.protocol)   // > 'https:'
 console.info(loc.username)   // > 'joe'
 console.info(loc.hostname)   // > 'example.com'
 console.info(loc.search)     // > '?q=hello'
+console.info(loc.hash)       // > 'footer'
 // ...
+```
 
-// optional:
+### Parsing the querystring
+Given a location `loc`, you can parse it's querystring using [uqs](https://github.com/download/uqs).
+
+```js
+// loc is the location object from the previous example
 var QS = require('uqs')
 var params = QS.parse(loc.search)
 console.info(params)         // > Object {q:'hello'}
+```
+
+### Relative URLs and the `base` parameter
+Relative URLs will be interpreted relative to the current location automatically on 
+browsers, but there is no such thing on Node. So we can pass a `base` parameter to 
+`ulocation` and it will use that URL as the base URL when constructing the location.
+
+```js
+// loc is the location object from the previous example
+var rel = ulocation('/test?x=y#header', loc.href) // <-- use as base
+console.info(rel.href)       // > 'https://joe:secret@example.com:80/home/test?x=y#header'
+console.info(rel.protocol)   // > 'https:'
+console.info(rel.username)   // > 'joe'
+console.info(rel.hostname)   // > 'example.com'
+console.info(rel.search)     // > '?x=y'
+console.info(rel.hash)       // > 'header'
 ```
 
 ## Microscopically small

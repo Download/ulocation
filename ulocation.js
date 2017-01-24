@@ -1,13 +1,19 @@
-function ulocation(url) {
+function ulocation(url, base) {
 	if (url === undefined || url === null) return url
-	return new Location(url)
+	return new Location(url, base)
 }
 
-function Location(url) {
+ulocation.resolve = require('./ulocation.resolve')
+
+function Location(url, base) {
+	if (base) return ulocation.resolve(url, base)
+
 	this.href = url
 	this.protocol = ''
 	this.username = ''
+	this.password = ''
 	this.hostname = ''
+	this.host = ''
 	this.port = ''
 	this.pathname = ''
 	this.search = ''
@@ -35,32 +41,27 @@ function Location(url) {
 	if (sep != -1) {
 		this.hostname = url.substring(0, sep)
 		url = url.substring(sep)
-	}
-	else {
-		this.hostname = url
-		url = ''
-	}
-
-	// get user, password and port
-	sep = this.hostname.indexOf("@")
-	if (sep != -1) {
-		this.username = this.hostname.substring(0, sep);
-		this.hostname = this.hostname.substring(sep + 1);
-		sep = this.username.indexOf(':')
+		// get user, password and port
+		sep = this.hostname.indexOf("@")
 		if (sep != -1) {
-			this.password = this.username.substring(sep + 1)
-			this.username = this.username.substring(0, sep)
+			this.username = this.hostname.substring(0, sep);
+			this.hostname = this.hostname.substring(sep + 1);
+			sep = this.username.indexOf(':')
+			if (sep != -1) {
+				this.password = this.username.substring(sep + 1)
+				this.username = this.username.substring(0, sep)
+			}
 		}
-	}
-	sep = this.hostname.indexOf(":");
-	if (sep != -1) {
-		this.port = this.hostname.substring(sep + 1);
-		this.hostname = this.hostname.substring(0, sep);
+		sep = this.hostname.indexOf(":");
+		if (sep != -1) {
+			this.port = this.hostname.substring(sep + 1);
+			this.hostname = this.hostname.substring(0, sep);
+		}
+		this.host = this.hostname
 	}
 
-	this.host = this.hostname
 	this.pathname = url
-  this.origin = this.protocol + '//' + this.hostname + (this.port ? ':' + this.port : '')
+	this.origin = (this.protocol || 'http:') + '//' + (this.hostname || 'localhost') + (this.port ? ':' + this.port : '')
 }
 
 Location.prototype.toString = function(){return this.href}
