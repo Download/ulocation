@@ -1,6 +1,6 @@
 {
   "name": "ulocation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Microscopically small universal URL to Location parser",
   "main": "ulocation.js",
   "browser": "ulocation.browser.js",

@@ -2,7 +2,7 @@ var expect = require('chai').expect
 
 var ulocation = require('./ulocation')
 
-describe('ulocation (browser)', function(){
+describe('ulocation(url)  // browser tests', function(){
 	it('is a function', function(){
 		expect(ulocation).to.be.a('function')
 	})
