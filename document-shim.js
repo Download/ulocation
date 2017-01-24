@@ -1,8 +1,8 @@
 var ulocation = require('./ulocation')
 
 module.exports = {
-	createElement() {
-		return Object.defineProperties({_: ulocation()}, {
+	createElement: function(){ 
+		return	Object.defineProperties({_: ulocation()}, {
 			protocol: {get:function(){return this._.protocol}},
 			username: {get:function(){return this._.username}},
 			password: {get:function(){return this._.password}},

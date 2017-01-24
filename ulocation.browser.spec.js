@@ -1,11 +1,10 @@
 var expect = require('chai').expect
 
 var ulocation = require('./ulocation.browser')
-// shim
-global.document = require('./document-shim')
+var document = require('./document-shim')
 
 var url = 'https://joe:secret@example.com:80/faq?q=Hello#footer',
-		l = ulocation(url)
+		l = ulocation(url, undefined, document)
 
 describe('ulocation(url, [base])  // browser tests', function(){
 	it('is a function', function(){
@@ -74,7 +73,7 @@ describe('ulocation(url, [base])  // browser tests', function(){
 	it('resolves `url` relative to `base` if base is passed and url is relative', function(){
 		var base = 'https://joe:secret@example.com:80/faq?q=Hello#footer'
 		url = '/test?x=y#header'
-		l = ulocation(url, base)
+		l = ulocation(url, base, document)
 		expect(l).to.have.a.property('href')
 		expect(l.href).to.eq('https://joe:secret@example.com:80/test?x=y#header')
 		expect(l).to.have.a.property('protocol')

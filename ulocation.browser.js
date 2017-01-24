@@ -1,14 +1,14 @@
-function ulocation(url, base){
+function ulocation(url, base, doc){
 	if (url === undefined || url === null) return url
-	return new Location(url, base)
+	return new Location(url, base, doc || ((typeof document == 'object') && document))
 }
 
 ulocation.resolve = require('./ulocation.resolve')
 
-function Location(url, base){
-	if (base) return ulocation.resolve(url, base)
+function Location(url, base, doc){
+	if (base) return ulocation.resolve(url, base, doc)
 
-  var a = document.createElement('a')
+  var a = doc.createElement('a')
   a.href = url
   this.href = a.href
   this.protocol = a.protocol
