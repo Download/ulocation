@@ -69,7 +69,7 @@ Add an issue in this project's [issue tracker](https://github.com/download/uloca
 to let me know of any problems you find, or questions you may have.
 
 ## Copyright
-Copyright 2016 by [Stijn de Witt](http://StijnDeWitt.com). Some rights reserved.
+Copyright 2017 by [Stijn de Witt](https://StijnDeWitt.com). Some rights reserved.
 
 ## License
-Licensed under the [MIT](https://github.com/Download/ulocation/blob/master/LICENSE.md) Open Source license.
+Licensed under the [MIT](https://github.com/download/ulocation/blob/master/LICENSE.md) Open Source license.
