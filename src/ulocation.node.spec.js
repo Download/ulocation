@@ -147,4 +147,12 @@ describe('Location(url, [base])  /* node tests */', function(){
 		expect(l).to.have.a.property('origin')
 		expect(l.origin).to.eq('http://www.example.org:8080')
 	})
+
+	it('fires a `change` event whenever it\'s `href` is set', function(){
+		expect(l.href).to.eq(url)
+		var eventFired = false
+		l.on('change', function(){eventFired = true})
+		l.href = 'https://github.com/download'
+		expect(eventFired).to.eq(true)
+	})
 })
