@@ -1,14 +1,10 @@
-function ulocation(url, base, doc){
-	if (url === undefined || url === null) return url
-	return new Location(url, base, doc || ((typeof document == 'object') && document))
-}
-
-ulocation.resolve = require('./ulocation.resolve')
+var Location = require('./location')
+Location.resolve = require('./resolver')
+Location.parse = require('./parser.browser')
 
 function Location(url, base, doc){
 	if (base) return ulocation.resolve(url, base, doc)
 
-  var a = doc.createElement('a')
   a.href = url
   this.href = a.href
   this.protocol = a.protocol
@@ -25,4 +21,4 @@ function Location(url, base, doc){
 
 Location.prototype.toString = function(){return this.href}
 
-module.exports = ulocation
+module.exports = Location

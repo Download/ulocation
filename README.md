@@ -12,7 +12,9 @@ url parser that returns location objects that closely mimic those used in browse
 
 If you need to parse the querystring in the `search` field, use [uqs](https://npmjs.com/package/uqs).
 
-**ulocation** supports the `origin` field on locations, shimming it in browsers that still lack support.
+ulocation supports the `origin` field on locations, shimming it in browsers that still lack support.
+
+This library depends on [uevents](https://npmjs.com/package/uevents).
 
 ## Install
 ```sh
@@ -21,20 +23,18 @@ npm install --save ulocation
 
 ## require
 ```js
-var ulocation = require('ulocation')
+var Location = require('ulocation')
 ```
 
 ## import
 ```js
-import ulocation from 'ulocation'
+import Location from 'ulocation'
 ```
 
 ## use
 ```js
-import ulocation from 'ulocation'
-var loc = ulocation('https://joe:secret@example.com:80/home/faq?q=hello#footer')
-// or, shorthand
-var loc = require('ulocation')('https://joe:secret@example.com:80/home/faq?q=hello#footer')
+import Location from 'ulocation'
+var loc = new Location('https://joe:secret@example.com:80/home/faq?q=hello#footer')
 
 // the url is parsed into it's constitutent parts 
 // (using native parsing in browsers and some logic in Node):
@@ -54,8 +54,38 @@ console.info(loc.hash)       // > 'footer'
 // ...
 ```
 
+### The `href` field
+The `href` field is backed by getter and setter functions and works like in browsers: set the field 
+and all others will update to match it. 
+
+```js
+console.info(loc.search)     // > '?q=hello'
+loc.href = 'https://joe:secret@example.com:80/home/faq?q=goodbye'
+console.info(loc.search)     // > '?q=goodbye'
+```
+
+> **Note**: Updating other fields is not recommended as there are no checks on it and your location 
+object will become internally inconsistent. Except for the `href` field, you should treat the location
+object as if it was immutable.
+
+#### The `change` event
+Locations are [EventEmitter](https://npmjs.com/package/uevents)s. Whenever the `href` field is updated, 
+the location object emits a `'change'` event. To listen for it, attach a listener using `on()`:
+
+```js
+// loc is the location object from the previous example
+loc.on('change', function(){
+	console.info(this.href)
+})
+
+loc.href = 'https://joe:secret@example.com:80/home/faq?q=hello#footer'
+
+// >  'https://joe:secret@example.com:80/home/faq?q=hello#footer'
+```
+
 ### Parsing the querystring
-Given a location `loc`, you can parse it's querystring using [uqs](https://github.com/download/uqs).
+Given a location `loc`, you can parse the querystring in it's `search` field 
+using [uqs](https://github.com/download/uqs).
 
 ```js
 // loc is the location object from the previous example
@@ -66,12 +96,13 @@ console.info(params)         // > Object {q:'hello'}
 
 ### Relative URLs and the `base` parameter
 Relative URLs will be interpreted relative to the current location automatically on 
-browsers, but there is no such thing on Node. So we can pass a `base` parameter to 
-`ulocation` and it will use that URL as the base URL when constructing the location.
+browsers, but there is no such thing on Node and in browsers we may want different behavior. 
+So we can pass a `base` parameter to `Location` and it will use that URL as the base URL 
+when constructing the location or updating it when the `href` field is set.
 
 ```js
 // loc is the location object from the previous example
-var rel = ulocation('/test?x=y#header', loc.href) // <-- use as base
+var rel = new Location('/test?x=y#header', loc.href) // <-- use as base
 console.info(rel.href)       // > 'https://joe:secret@example.com:80/home/test?x=y#header'
 console.info(rel.protocol)   // > 'https:'
 console.info(rel.username)   // > 'joe'
@@ -81,7 +112,7 @@ console.info(rel.hash)       // > 'header'
 ```
 
 ## Microscopically small
-The browser version of ulocation is just ~0.5kB minified and zipped. 
+The browser version of ulocation is just ~1kB minified and zipped. 
 Due to it's tiny size it does not come as a separate download. Instead you should use 
 [Browserify](http://browserify.org/) or [Webpack](https://webpack.js.org/) to include 
 it in your bundle.

@@ -1,11 +1,11 @@
 {
   "name": "ulocation",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Microscopically small universal URL to Location parser",
-  "main": "ulocation.js",
-  "browser": "ulocation.browser.js",
+  "main": "src/ulocation.node.js",
+  "browser": "src/ulocation.browser.js",
   "scripts": {
-    "test": "mocha *.spec.js"
+    "test": "mocha src/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -32,5 +32,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "uevents": "^1.0.0"
   }
 }

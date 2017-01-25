@@ -1,8 +1,10 @@
-var ulocation = require('./ulocation')
+var Location = require('./location')
+Location.resolve = require('./resolver')
+Location.parse = require('./parser.node')
 
 module.exports = {
 	createElement: function(){ 
-		return	Object.defineProperties({_: ulocation()}, {
+		return Object.defineProperties({_: new Location()}, {
 			protocol: {get:function(){return this._.protocol}},
 			username: {get:function(){return this._.username}},
 			password: {get:function(){return this._.password}},
@@ -12,10 +14,10 @@ module.exports = {
 			pathname: {get:function(){return this._.pathname}},
 			search: {get:function(){return this._.search}},
 			hash: {get:function(){return this._.hash}},
-			username: {get:function(){return this._.username}},
+			origin: {get:function(){return this._.origin}},
 			href: {
 				get: function(){return this._.href},
-				set:function(href){this._ = ulocation(href);}
+				set:function(href){this._.href = href;}
 			}
 		})
 	}

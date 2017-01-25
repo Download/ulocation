@@ -1,14 +1,20 @@
 var expect = require('chai').expect
 
-var ulocation = require('./ulocation.browser')
-var document = require('./document-shim')
+var Location = require('./ulocation.node')
 
-var url = 'https://joe:secret@example.com:80/faq?q=Hello#footer',
-		l = ulocation(url, undefined, document)
+global.document = require('./document-shim')
 
-describe('ulocation(url, [base])  // browser tests', function(){
+describe('Location(url, [base])  /* node tests */', function(){
+	var url, base, l
+
+	beforeEach(function(){
+		url = 'https://joe:secret@example.com:80/faq?q=Hello#footer'
+		base = 'https://joe:secret@example.com:80/'
+		l = new Location(url, base)		
+	})
+
 	it('is a function', function(){
-		expect(ulocation).to.be.a('function')
+		expect(Location).to.be.a('function')
 	})
 
 	it('accepts a URL as parameter and returns a location object', function(){
@@ -71,9 +77,8 @@ describe('ulocation(url, [base])  // browser tests', function(){
 	})
 
 	it('resolves `url` relative to `base` if base is passed and url is relative', function(){
-		var base = 'https://joe:secret@example.com:80/faq?q=Hello#footer'
-		url = '/test?x=y#header'
-		l = ulocation(url, base, document)
+		var url = '/test?x=y#header'    // shadow global url
+		var l = new Location(url, base) // shadow global l
 		expect(l).to.have.a.property('href')
 		expect(l.href).to.eq('https://joe:secret@example.com:80/test?x=y#header')
 		expect(l).to.have.a.property('protocol')
@@ -96,5 +101,50 @@ describe('ulocation(url, [base])  // browser tests', function(){
 		expect(l.hash).to.eq('#header')
 		expect(l).to.have.a.property('origin')
 		expect(l.origin).to.eq('https://example.com:80')
+	})
+
+	it('updates it\'s properties when `href` is set to a new url', function(){
+		expect(l.href).to.eq(url)
+		expect(l).to.have.a.property('protocol')
+		expect(l.protocol).to.eq('https:')
+		expect(l).to.have.a.property('username')
+		expect(l.username).to.eq('joe')
+		expect(l).to.have.a.property('password')
+		expect(l.password).to.eq('secret')
+		expect(l).to.have.a.property('hostname')
+		expect(l.hostname).to.eq('example.com')
+		expect(l).to.have.a.property('host')
+		expect(l.host).to.eq(l.hostname)
+		expect(l).to.have.a.property('port')
+		expect(l.port).to.eq('80')
+		expect(l).to.have.a.property('pathname')
+		expect(l.pathname).to.eq('/faq')
+		expect(l).to.have.a.property('search')
+		expect(l.search).to.eq('?q=Hello')
+		expect(l).to.have.a.property('hash')
+		expect(l.hash).to.eq('#footer')
+		expect(l).to.have.a.property('origin')
+		expect(l.origin).to.eq('https://example.com:80')
+		
+		var newUrl = 'http://www.example.org:8080/tests?test=set-href#check'
+		l.href = newUrl
+
+		expect(l.href).to.eq(newUrl)
+		expect(l).to.have.a.property('protocol')
+		expect(l.protocol).to.eq('http:')
+		expect(l).to.have.a.property('hostname')
+		expect(l.hostname).to.eq('www.example.org')
+		expect(l).to.have.a.property('host')
+		expect(l.host).to.eq(l.hostname)
+		expect(l).to.have.a.property('port')
+		expect(l.port).to.eq('8080')
+		expect(l).to.have.a.property('pathname')
+		expect(l.pathname).to.eq('/tests')
+		expect(l).to.have.a.property('search')
+		expect(l.search).to.eq('?test=set-href')
+		expect(l).to.have.a.property('hash')
+		expect(l.hash).to.eq('#check')
+		expect(l).to.have.a.property('origin')
+		expect(l.origin).to.eq('http://www.example.org:8080')
 	})
 })
