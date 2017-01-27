@@ -14,7 +14,7 @@ If you need to parse the querystring in the `search` field, use [uqs](https://np
 
 ulocation supports the `origin` field on locations, shimming it in browsers that still lack support.
 
-This library depends on [uevents](https://npmjs.com/package/uevents).
+You can listen for any changes to a location object by turning it into an [EventEmitter](https://npmjs.com/package/uevents).
 
 ## Install
 ```sh
@@ -73,7 +73,7 @@ loc.href = 'https://joe:secret@example.com:80/home/faq?q=goodbye'
 console.info(loc.search)     // > '?q=goodbye'
 ```
 
-#### The `change` event
+### The `change` event
 ulocation objects have built-in support for `EventEmitter`. If a change is made and the location 
 object has an `emit` function, a `change` event will be emitted.
 
