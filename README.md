@@ -74,10 +74,11 @@ console.info(loc.search)     // > '?q=goodbye'
 ```
 
 #### The `change` event
-Location objects have built-in support for `EventEmitter`. If a change is made and the location 
+ulocation objects have built-in support for `EventEmitter`. If a change is made and the location 
 object has an `emit` function, a `change` event will be emitted.
 
-To change a location into an event emitter, I recommend [uevents](https://npmjs.com/package/uevents)s. ;)
+To change a location into an event emitter, I recommend [uevents](https://npmjs.com/package/uevents),
+but you can also use Node's `events` module.
 
 ```js
 var EventEmitter = require('uevents')
@@ -110,10 +111,12 @@ console.info(params)         // > Object {q:'hello'}
 ```
 
 ### Relative URLs and the `base` parameter
-Relative URLs will be interpreted relative to the current location automatically on 
-browsers, but there is no such thing on Node and in browsers we may want different behavior. 
-So we can pass a `base` parameter to `Location` and it will use that URL as the base URL 
-when constructing the location or updating it when the `href` field is set.
+Relative URLs are normally interpreted relative to the current location automatically on 
+browsers. We can make ulocations work the same way by passing a `base` parameter to `Location`.
+
+It will use the passed URL as the base URL when constructing the location or updating 
+it when the `href` field is set. If no `base` is passed, it uses the current URL as 
+base for the new URL when setting `href` to a relative URL.
 
 ```js
 // loc is the location object from the previous example

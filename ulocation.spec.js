@@ -8,7 +8,7 @@ describe('Location(url, [base]) ', function(){
 
 	beforeEach(function(){
 		url = 'https://joe:secret@example.com:80/faq?q=Hello#footer'
-		base = 'https://joe:secret@example.com:80/'
+		base = 'https://joe:secret@example.com:80/base/path/file.jpg'
 		l = new Location(url, base)
 	})
 
@@ -45,7 +45,7 @@ describe('Location(url, [base]) ', function(){
 		expect(l.hostname).to.eq('example.com')
 	})
 
-	it('port  /* The port number of the URL, or \'\' */', function(){
+	it('port      /* The port number of the URL, or \'\' */', function(){
 		expect(l).to.have.a.property('port')
 		expect(l.port).to.eq('80')
 	})
@@ -55,12 +55,12 @@ describe('Location(url, [base]) ', function(){
 		expect(l.pathname).to.eq('/faq')
 	})
 
-	it('search  /* \'?\' followed by the parameters of the URL, or \'\' */', function(){
+	it('search    /* \'?\' followed by the parameters of the URL, or \'\' */', function(){
 		expect(l).to.have.a.property('search')
 		expect(l.search).to.eq('?q=Hello')
 	})
 
-	it('hash  /* \'#\' followed by the fragment identifier of the URL, or \'\' */', function(){
+	it('hash      /* \'#\' followed by the fragment identifier of the URL, or \'\' */', function(){
 		expect(l).to.have.a.property('hash')
 		expect(l.hash).to.eq('#footer')
 	})
@@ -72,22 +72,22 @@ describe('Location(url, [base]) ', function(){
 		expect(l).to.have.a.property('baseURI')
 	})
 
-	it('href  /* The entire URL */', function(){
+	it('href      /* The entire URL */', function(){
 		expect(l).to.have.a.property('href')
 		expect(l.href).to.eq(url)
 	})
 
-	it('host  /* (read-only) The hostname, a \':\', and the port of the URL */', function(){
+	it('host      /* (read-only) The hostname, a \':\', and the port of the URL */', function(){
 		expect(l).to.have.a.property('host')
 		expect(l.host).to.eq('example.com:80')
 	})
 
-	it('origin  /* (read-only) The canonical form of the origin of the specific location */', function(){
+	it('origin    /* (read-only) The canonical form of the origin of the specific location */', function(){
 		expect(l).to.have.a.property('origin')
 		expect(l.origin).to.eq('https://example.com:80')
 	})
 
-	it('baseURI  /* (read-only) The base URL that is used to resolve relative URLs */', function(){
+	it('baseURI   /* (read-only) The base URL that is used to resolve relative URLs */', function(){
 		expect(l).to.have.a.property('baseURI')
 		expect(l.baseURI).to.eq(base)
 	})
@@ -98,35 +98,6 @@ describe('Location(url, [base]) ', function(){
 		expect(l.href).to.eq('https://joe:secret@example.com:8080/faq?q=Hello#footer')
 		expect(l.host).to.eq('example.com:8080')
 		expect(l.origin).to.eq('https://example.com:8080')
-	})
-
-	
-	// Whenever href is set, all properties update automatically
-
-	it('resolves `url` relative to `base` if base is passed and url is relative', function(){
-		var url = '/test?x=y#header'    // shadow global url
-		var l = new Location(url, base) // shadow global l
-		expect(l).to.have.a.property('href')
-		expect(l.href).to.eq('https://joe:secret@example.com:80/test?x=y#header')
-		expect(l).to.have.a.property('protocol')
-		expect(l.protocol).to.eq('https:')
-		expect(l).to.have.a.property('username')
-		expect(l.username).to.eq('joe')
-		expect(l).to.have.a.property('password')
-		expect(l.password).to.eq('secret')
-		expect(l).to.have.a.property('hostname')
-		expect(l.hostname).to.eq('example.com')
-		expect(l).to.have.a.property('host')
-		expect(l).to.have.a.property('port')
-		expect(l.port).to.eq('80')
-		expect(l).to.have.a.property('pathname')
-		expect(l.pathname).to.eq('/test')
-		expect(l).to.have.a.property('search')
-		expect(l.search).to.eq('?x=y')
-		expect(l).to.have.a.property('hash')
-		expect(l.hash).to.eq('#header')
-		expect(l).to.have.a.property('origin')
-		expect(l.origin).to.eq('https://example.com:80')
 	})
 
 	it('updates it\'s properties when `href` is set to a new url', function(){
@@ -170,6 +141,77 @@ describe('Location(url, [base]) ', function(){
 		expect(l.hash).to.eq('#check')
 		expect(l).to.have.a.property('origin')
 		expect(l.origin).to.eq('http://www.example.org:8080')
+	})
+	
+	it('resolves `url` relative to `base` if base is passed and url is relative', function(){
+		var url = '/test?x=y#header'    // shadow global url
+		var l = new Location(url, base) // shadow global l
+		expect(l).to.have.a.property('href')
+		expect(l.href).to.eq('https://joe:secret@example.com:80/test?x=y#header')
+		expect(l).to.have.a.property('protocol')
+		expect(l.protocol).to.eq('https:')
+		expect(l).to.have.a.property('username')
+		expect(l.username).to.eq('joe')
+		expect(l).to.have.a.property('password')
+		expect(l.password).to.eq('secret')
+		expect(l).to.have.a.property('hostname')
+		expect(l.hostname).to.eq('example.com')
+		expect(l).to.have.a.property('host')
+		expect(l).to.have.a.property('port')
+		expect(l.port).to.eq('80')
+		expect(l).to.have.a.property('pathname')
+		expect(l.pathname).to.eq('/test')
+		expect(l).to.have.a.property('search')
+		expect(l.search).to.eq('?x=y')
+		expect(l).to.have.a.property('hash')
+		expect(l.hash).to.eq('#header')
+		expect(l).to.have.a.property('origin')
+		expect(l.origin).to.eq('https://example.com:80')
+	})
+
+	it('resolves the new `href` to the current `baseURI` if url is relative', function(){
+		var url = '/test?x=y#header'    // shadow global url
+		var l = new Location(base, base) // shadow global l
+		l.href = url
+		expect(l).to.have.a.property('href')
+		expect(l.href).to.eq('https://joe:secret@example.com:80/test?x=y#header')
+		expect(l).to.have.a.property('protocol')
+		expect(l.protocol).to.eq('https:')
+		expect(l).to.have.a.property('username')
+		expect(l.username).to.eq('joe')
+		expect(l).to.have.a.property('password')
+		expect(l.password).to.eq('secret')
+		expect(l).to.have.a.property('hostname')
+		expect(l.hostname).to.eq('example.com')
+		expect(l).to.have.a.property('host')
+		expect(l).to.have.a.property('port')
+		expect(l.port).to.eq('80')
+		expect(l).to.have.a.property('pathname')
+		expect(l.pathname).to.eq('/test')
+		expect(l).to.have.a.property('search')
+		expect(l.search).to.eq('?x=y')
+		expect(l).to.have.a.property('hash')
+		expect(l.hash).to.eq('#header')
+		expect(l).to.have.a.property('origin')
+		expect(l.origin).to.eq('https://example.com:80')
+	})
+
+	it('resolves scheme-relative urls (starting with \'//\')', function(){
+		var url = '//www.example.com/path/file.ext'    // shadow global url
+		var l = new Location(url, base) // shadow global l
+		expect(l.href).to.eq('https://www.example.com/path/file.ext')
+	})
+
+	it('resolves relative urls with \'magic\' dot path segments (\'.\' and \'..\')', function(){
+		var url = '../test'    // shadow global url
+		var l = new Location(url, base) // shadow global l
+		expect(l.href).to.eq('https://joe:secret@example.com:80/base/test')
+		var url = './test'    // shadow global url
+		var l = new Location(url, base) // shadow global l
+		expect(l.href).to.eq('https://joe:secret@example.com:80/base/path/test')
+		var url = '.././.././test/pic.gif'    // shadow global url
+		var l = new Location(url, base) // shadow global l
+		expect(l.href).to.eq('https://joe:secret@example.com:80/test/pic.gif')
 	})
 
 	it('fires a `change` event when turned into an event emitter and it\'s `href` is set', function(){
