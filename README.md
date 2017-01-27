@@ -35,24 +35,33 @@ import Location from 'ulocation'
 ```js
 import Location from 'ulocation'
 var loc = new Location('https://joe:secret@example.com:80/home/faq?q=hello#footer')
-
-// the url is parsed into it's constitutent parts 
-// (using native parsing in browsers and some logic in Node):
-//
-//   https://joe:secret@example.com:80/home/faq?q=hello#footer
-//   \____/  \_/ \____/ \_________/ \/\_______/\______/\_____/
-//	    |     |     |        |       |    |        |      |
-//  protocol  |  password    |     port   |      search   |
-//        username       hostname      pathname          hash
-
-console.info(loc.href)       // > 'https://joe:secret@example.com:80/home/faq?q=hello#footer'
 console.info(loc.protocol)   // > 'https:'
 console.info(loc.username)   // > 'joe'
 console.info(loc.hostname)   // > 'example.com'
 console.info(loc.search)     // > '?q=hello'
 console.info(loc.hash)       // > 'footer'
+
+loc.href = 'http://example.com'
+console.info(loc.protocol)   // > 'http:'
+
+loc.protocol = 'ftp:'
+console.info(loc.protocol)   // > 'ftp:'
+console.info(loc.href)       // > 'ftp://example.com'
 // ...
 ```
+
+### The parts of the URL
+The url is parsed into it's constitutent parts (using native parsing in browsers and some logic in Node):
+
+```
+  https://joe:secret@example.com:80/home/faq?q=hello#footer
+  \____/  \_/ \____/ \_________/ \/\_______/\______/\_____/
+    |      |     |        |       |    |        |      |
+ protocol  |   password   |     port   |      search   |
+        username       hostname     pathname          hash
+```
+
+You can set any of these fields to a different value later and all other fields will update automatically.
 
 ### The `href` field
 The `href` field is backed by getter and setter functions and works like in browsers: set the field 
@@ -64,13 +73,19 @@ loc.href = 'https://joe:secret@example.com:80/home/faq?q=goodbye'
 console.info(loc.search)     // > '?q=goodbye'
 ```
 
-> **Note**: Updating other fields is not recommended as there are no checks on it and your location 
-object will become internally inconsistent. Except for the `href` field, you should treat the location
-object as if it was immutable.
-
 #### The `change` event
-Locations are [EventEmitter](https://npmjs.com/package/uevents)s. Whenever the `href` field is updated, 
-the location object emits a `'change'` event. To listen for it, attach a listener using `on()`:
+Location objects have built-in support for `EventEmitter`. If a change is made and the location 
+object has an `emit` function, a `change` event will be emitted.
+
+To change a location into an event emitter, I recommend [uevents](https://npmjs.com/package/uevents)s. ;)
+
+```js
+var EventEmitter = require('uevents')
+var loc = EventEmitter(Location('http://example.com'))
+```
+
+Now, whenever the `href` field is updated, `loc` emits a `'change'` event. 
+To listen for it, attach a listener using `on()`:
 
 ```js
 // loc is the location object from the previous example
