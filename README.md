@@ -1,4 +1,6 @@
 # ulocation
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/ulocation.svg)](https://greenkeeper.io/)
 Microscopically small universal URL to Location parser
 
 [![npm](https://img.shields.io/npm/v/ulocation.svg)](https://npmjs.com/package/ulocation)
