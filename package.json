@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/Download/ulocation#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "mocha": "^3.2.0",
     "uevents": "^1.0.0"
   },
